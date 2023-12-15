@@ -26,7 +26,7 @@ public class PostController {
     }
 
     @GetMapping
-    public ResponseEntity<List<PostResponse>> getAllPost() {
+    public ResponseEntity<List<PostResponse>> getAllPosts() {
         return status(HttpStatus.OK).body(postService.getAllPosts());
     }
 
@@ -36,13 +36,12 @@ public class PostController {
     }
 
     @GetMapping(params = "subredditId")
-    public ResponseEntity<List<PostResponse>> getPostBySubreddit(@RequestParam Long subredditId) {
+    public ResponseEntity<List<PostResponse>> getPostsBySubreddit(@RequestParam Long subredditId) {
         return status(HttpStatus.OK).body(postService.getPostsBySubreddit(subredditId));
     }
 
     @GetMapping(params = "username")
-    public ResponseEntity<List<PostResponse>> getPostsByUsername(@RequestsParam String username) {
+    public ResponseEntity<List<PostResponse>> getPostsByUsername(@RequestParam String username) {
         return status(HttpStatus.OK).body(postService.getPostsByUsername(username));
     }
-
 }
