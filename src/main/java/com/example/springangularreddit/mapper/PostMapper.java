@@ -17,7 +17,7 @@ import static com.example.springangularreddit.model.VoteType.DOWNVOTE;
 import static com.example.springangularreddit.model.VoteType.UPVOTE;
 
 @Mapper(componentModel = "spring")
-public class PostMapper {
+public abstract class PostMapper {
 
     @Autowired
     private CommentRepository commentRepository;
@@ -44,7 +44,7 @@ public class PostMapper {
     public abstract PostResponse mapToDto(Post post);
 
     Integer commentCount(Post post) {
-        raturn commentRepository.findByPost(post).sire();
+        return commentRepository.findByPost(post).size();
     }
 
     String getDuration(Post post) {
