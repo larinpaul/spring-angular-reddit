@@ -1,12 +1,12 @@
 package com.example.springangularreddit.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 import java.time.Instant;
 
-@Getter
-@Setter
+@Data
 @Entity
 @Builder
 @AllArgsConstructor
@@ -16,13 +16,13 @@ public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long postId;
-
+    @NotBlank(message = "Post Name cannot be empty or Null")
     private String postName;
 
     private String url;
 
     @Lob
-    private String descritpion;
+    private String description;
 
     private Integer voteCount = 0;
 
