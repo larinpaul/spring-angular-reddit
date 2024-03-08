@@ -37,4 +37,3 @@ public class Post {
     private Subreddit subreddit;
 
 }
-
