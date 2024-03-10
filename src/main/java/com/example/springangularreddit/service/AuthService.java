@@ -3,25 +3,21 @@ package com.example.springangularreddit.service;
 import com.example.springangularreddit.dto.RegisterRequest;
 import com.example.springangularreddit.model.User;
 import com.example.springangularreddit.repository.UserRepository;
+import jakarta.transaction.Transactional;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.time.Instant;
 
 @Service
+@AllArgsConstructor
 public class AuthService {
 
-    // There's nothing wrong with using the @Autowired annotation
-    // But it is not usually recommended because we are using field injection here
-    // And Spring recommends us to use constructor injection whenever possible
+    private final PasswordEncoder passwordEncoder;
+    private final UserRepository userRepository;
 
-    // Spring will now take care of encoding the password
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-    // Now let's save a user in our repository
-    @Autowired
-    private UserRepository userRepository;
-
+    @Transactional
     public void signup(RegisterRequest registerRequest) {
         User user = new User();
         user.setUsername(registerRequest.getUsername());
@@ -29,6 +25,7 @@ public class AuthService {
         user.setPassword(registerRequest.getPasswodr());
         user.setCreated(Instant.now());
         user.setEnabled(false);
+
         userRepository.save(user);
     }
 
