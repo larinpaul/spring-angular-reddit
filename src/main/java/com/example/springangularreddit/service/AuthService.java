@@ -2,11 +2,17 @@ package com.example.springangularreddit.service;
 
 import com.example.springangularreddit.dto.RegisterRequest;
 import com.example.springangularreddit.model.User;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.time.Instant;
 
 @Service
 public class AuthService {
+
+    // Spring will now take care of encoding the password
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public void signup(RegisterRequest registerRequest) {
         User user = new User();
