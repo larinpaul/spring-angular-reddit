@@ -1,17 +1,20 @@
 package com.example.springangularreddit.service;
 
 import com.example.springangularreddit.dto.RegisterRequest;
+import com.example.springangularreddit.exceptions.SpringRedditException;
 import com.example.springangularreddit.model.NotificationEmail;
 import com.example.springangularreddit.model.User;
 import com.example.springangularreddit.model.VerificationToken;
 import com.example.springangularreddit.repository.UserRepository;
 import com.example.springangularreddit.repository.VerificationTokenRepository;
 import jakarta.transaction.Transactional;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -51,6 +54,20 @@ public class AuthService {
         return token;
     }
 
+    public void verifyAccount(String token) {
+        Optional<VerificationToken> verificationToken =
+                verificationTokenRepository.findByToken(token);
+        verificationToken.orElseThrow(() -> new SpringRedditException("Invalid Token"));
+        fetchUserAndEnable(verificationToken.get());
+    }
+
+    @Transactional
+    protected void fetchUserAndEnable(VerificationToken verificationToken) {
+        String username = verificationToken.getUser().getUsername();
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new SpringRedditException("User not found with name - " + username));
+        user.setEnabled(true);
+        userRepository.save(user);
+    }
 }
 
 //package com.example.springangularreddit.service;
