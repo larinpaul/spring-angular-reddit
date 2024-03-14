@@ -1,5 +1,6 @@
 package com.example.springangularreddit.controller;
 
+import com.example.springangularreddit.dto.LoginRequest;
 import com.example.springangularreddit.dto.RegisterRequest;
 import com.example.springangularreddit.service.AuthService;
 import lombok.AllArgsConstructor;
@@ -23,6 +24,11 @@ public class AuthController {
     public ResponseEntity<String> verifyAccount(@PathVariable String token) {
         authService.verifyAccount(token);
         return new ResponseEntity<>("Account Activated Successfully", HttpStatus.OK);
+    }
+
+    @PostMapping("/login")
+    public void login(@RequestBody LoginRequest loginRequest) {
+        authService.login(loginRequest);
     }
 
 }

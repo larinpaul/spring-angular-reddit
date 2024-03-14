@@ -1,5 +1,6 @@
 package com.example.springangularreddit.service;
 
+import com.example.springangularreddit.dto.LoginRequest;
 import com.example.springangularreddit.dto.RegisterRequest;
 import com.example.springangularreddit.exceptions.SpringRedditException;
 import com.example.springangularreddit.model.NotificationEmail;
@@ -10,6 +11,8 @@ import com.example.springangularreddit.repository.VerificationTokenRepository;
 import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +28,7 @@ public class AuthService {
     private final UserRepository userRepository;
     private final VerificationTokenRepository verificationTokenRepository;
     private final MailService mailService;
+    private final AuthenticationManager authenticationManager;
 
     @Transactional
     public void signup(RegisterRequest registerRequest) {
@@ -68,6 +72,12 @@ public class AuthService {
         user.setEnabled(true);
         userRepository.save(user);
     }
+
+    public void login(LoginRequest loginRequest) {
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername()
+                .loginRequest.getPassword()));
+    }
+
 }
 
 //package com.example.springangularreddit.service;
