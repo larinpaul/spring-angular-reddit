@@ -1,5 +1,6 @@
 package com.example.springangularreddit.controller;
 
+import com.example.springangularreddit.dto.AuthenticationResponse;
 import com.example.springangularreddit.dto.LoginRequest;
 import com.example.springangularreddit.dto.RegisterRequest;
 import com.example.springangularreddit.service.AuthService;
@@ -27,8 +28,8 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public void login(@RequestBody LoginRequest loginRequest) {
-        authService.login(loginRequest);
+    public AuthenticationResponse login(@RequestBody LoginRequest loginRequest) {
+        return authService.login(loginRequest);
     }
 
 }
