@@ -12,6 +12,8 @@ import java.io.InputStream;
 import java.security.*;
 import java.security.cert.CertificateException;
 
+import static io.jsonwebtoken.Jwts.parser;
+
 @Service
 public class JwtProvider {
 
@@ -47,6 +49,19 @@ public class JwtProvider {
         }
     }
 
+    public boolean validateToken(String jwt) {
+        parser().setSigningKey(getPublicKey()).parseClaimsJws(jwt);
+        return true;
+    }
+
+    private PublicKey getPublicKey() {
+        try {
+            return keyStore.getCertificate("springblog").getPublicKey();
+        } catch (KeyStoreException e) {
+            throw new SpringRedditException("Exception occurred while " +
+                    "retrieving public key from keystore");
+        }
+    }
 
 }
 
