@@ -1,6 +1,6 @@
 package com.example.springangularreddit.security;
 
-import io.jsonwebtoken.Jwt;
+import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -11,6 +11,8 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+
+import static io.jsonwebtoken.Jwts.parser;
 
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
@@ -37,5 +39,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
         return bearerToken;
     }
+
+    public String getUsernameFromJwt(String token) {
+        Claims claims = parser()
+                .setSigningKey(getPublickey())
+                .parseClaimsJwt(token)
+                .getBody();
+
+        return claims.getSubject();
+    }
+
 
 }
