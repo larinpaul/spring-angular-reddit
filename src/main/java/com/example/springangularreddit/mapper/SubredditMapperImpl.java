@@ -32,4 +32,19 @@ public class SubredditMapperImpl implements SubredditMapper {
         return subredditDto.build();
     }
 
+    @Override
+    public Subreddit mapDtoToSubreddit(SubredditDto subredditDto) {
+        if ( subredditDto == null ) {
+            return null;
+        }
+
+        SubredditBuilder builder = Subreddit.builder();
+
+        subreddit.id( subredditDto.getId() );
+        subreddit.name( subredditDto.getName() );
+        subreddit.description( subredditDto.getDescription() );
+
+        return subreddit.build();
+    }
+
 }

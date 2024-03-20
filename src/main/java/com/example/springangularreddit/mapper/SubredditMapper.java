@@ -3,6 +3,7 @@ package com.example.springangularreddit.mapper;
 import com.example.springangularreddit.dto.SubredditDto;
 import com.example.springangularreddit.model.Post;
 import com.example.springangularreddit.model.Subreddit;
+import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -21,7 +22,9 @@ public interface SubredditMapper {
         return numberOfPosts.size();
     }
 
-
+    @InheritInverseConfiguration
+    @Mapping(target = "posts", ignore = true)
+    Subreddit mapDtoToSubredit(SubredditDto subredditDto);
 
 }
 
