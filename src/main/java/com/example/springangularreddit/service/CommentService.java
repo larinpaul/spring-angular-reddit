@@ -4,7 +4,9 @@ import com.example.springangularreddit.dto.CommentsDto;
 import com.example.springangularreddit.exceptions.PostNotFoundException;
 import com.example.springangularreddit.mapper.CommentMapper;
 import com.example.springangularreddit.model.Comment;
+import com.example.springangularreddit.model.NotificationEmail;
 import com.example.springangularreddit.model.Post;
+import com.example.springangularreddit.model.User;
 import com.example.springangularreddit.repository.CommentRepository;
 import com.example.springangularreddit.repository.PostRepository;
 import com.example.springangularreddit.repository.UserRepository;
@@ -15,17 +17,27 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 public class CommentService {
 
+    private static final String POST_URL = "";
     private final PostRepository postRepository;
     private final UserRepository userRepository;
     private final AuthService authService;
     private final CommentMapper commentMapper;
     private final CommentRepository commentRepository;
+    private final MailContentBuilder mailContentBuilder;
+    private final MailService mailService;
 
     public void save(CommentsDto commentsDto) {
         Post post = postRepository.findById(commentsDto.getPostId())
                 .orElseThrow(() -> new PostNotFoundException(commentsDto.getPostId()).toString());
         Comment comment = commentMapper.map(commentsDto, post, authService.getCurrentUser());
         commentRepository.save(comment);
+
+        String message = mailContentBuilder.build(post.getUser().getUsername() + " posted a comment on your post." + POST_URL);
+        sendCommentNotification(message, post.getUser());
+    }
+
+    private void sendCommentNotification(String message, User user) {
+        mailService.sendMail(new NotificationEmail(user.getUsername() + " Commented on your post", user.getEmail(), message));
     }
 
 }
