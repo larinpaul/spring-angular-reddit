@@ -13,6 +13,11 @@ import com.example.springangularreddit.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toList;
+
 @Service
 @AllArgsConstructor
 public class CommentService {
@@ -38,6 +43,13 @@ public class CommentService {
 
     private void sendCommentNotification(String message, User user) {
         mailService.sendMail(new NotificationEmail(user.getUsername() + " Commented on your post", user.getEmail(), message));
+    }
+
+    public List<CommentsDto> getAllCommentsForPost(Long postId) {
+        Post post = postRepository.findById(postId).orElseThrow(() -> new PostNotFoundException(postId.toString()));
+        return commentRepository.findByPost(post)
+                .stream()
+                .map(commentMapper::mapToDto).collect(toList());
     }
 
 }
