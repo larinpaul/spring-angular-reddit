@@ -1,6 +1,13 @@
 package com.example.springangularreddit.service;
 
 import com.example.springangularreddit.dto.CommentsDto;
+import com.example.springangularreddit.exceptions.PostNotFoundException;
+import com.example.springangularreddit.mapper.CommentMapper;
+import com.example.springangularreddit.model.Comment;
+import com.example.springangularreddit.model.Post;
+import com.example.springangularreddit.repository.CommentRepository;
+import com.example.springangularreddit.repository.PostRepository;
+import com.example.springangularreddit.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -8,8 +15,17 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 public class CommentService {
 
-    public void save(CommentsDto commentsDto) {
+    private final PostRepository postRepository;
+    private final UserRepository userRepository;
+    private final AuthService authService;
+    private final CommentMapper commentMapper;
+    private final CommentRepository commentRepository;
 
+    public void save(CommentsDto commentsDto) {
+        Post post = postRepository.findById(commentsDto.getPostId())
+                .orElseThrow(() -> new PostNotFoundException(commentsDto.getPostId()).toString());
+        Comment comment = commentMapper.map(commentsDto, post, authService.getCurrentUser());
+        commentRepository.save(comment);
     }
 
 }
