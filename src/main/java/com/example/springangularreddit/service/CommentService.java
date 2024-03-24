@@ -11,6 +11,7 @@ import com.example.springangularreddit.repository.CommentRepository;
 import com.example.springangularreddit.repository.PostRepository;
 import com.example.springangularreddit.repository.UserRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -52,6 +53,14 @@ public class CommentService {
                 .map(commentMapper::mapToDto).collect(toList());
     }
 
+    public List<CommentsDto> getAllCommentsForUser(String userName) {
+        User user = userRepository.findByUsername(userName)
+                .orElseThrow(() -> new UsernameNotFoundException(userName));
+        return commentRepository.findAllByUser(user)
+                .stream()
+                .map(commentMapper::mapToDto)
+                .collect(toList());
+    }
 }
 
 //package com.example.springangularreddit.service;
