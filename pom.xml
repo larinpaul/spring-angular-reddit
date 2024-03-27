@@ -87,7 +87,8 @@
 			<artifactId>springdoc-openapi-starter-webmvc-api</artifactId>
 			<version>2.0.2</version>
 		</dependency>
-		<!-- For Displaying time as Relative Time Ago ("Posted 1 Day ago")-->
+		<!-- For Displaying time as Relative Time Ago ("Posted 1 Day ago")
+		as this is a Kotlin library, we also need Kotlin runtime libraries -->
 		<dependency>
 			<groupId>com.github.marlonlom</groupId>
 			<artifactId>timeago</artifactId>
@@ -180,6 +181,8 @@
 					</annotationProcessorPaths>
 				</configuration>
 			</plugin>
+<!--			We also need the kotlin-maven-plugin-->
+<!--			When it finds some Kotlin code, it makes sure to generate some Java code for that-->
 			<plugin>
 				<groupId>org.jetbrains.kotlin</groupId>
 				<artifactId>kotlin-maven-plugin</artifactId>
