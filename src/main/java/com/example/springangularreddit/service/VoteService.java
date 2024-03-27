@@ -39,6 +39,13 @@ public class VoteService {
         postRepository.save(post);
     }
 
+    private Vote mapToVote(VoteDto voteDto, Post post) {
+        return Vote.builder()
+                .voteType(voteDto.getVoteType())
+                .post(post)
+                .user(authService.getCurrentUser())
+                .build();
+    }
 
 }
 
