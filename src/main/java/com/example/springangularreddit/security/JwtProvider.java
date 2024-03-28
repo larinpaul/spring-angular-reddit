@@ -1,6 +1,7 @@
 package com.example.springangularreddit.security;
 
 import com.example.springangularreddit.exceptions.SpringRedditException;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import jakarta.annotation.PostConstruct;
 import lombok.Value;
@@ -45,17 +46,6 @@ public class JwtProvider {
                 .compact();
     }
 
-    public String generateToke1n(Authentication authentication) {
-        // This is the one I wrote:
-        org.springframework.security.core.userdetails.User principalLong = (org.springframework.security.core.userdetails.User) authentication.getPrincipal();
-        // This is the one he has (probably imported User separately):
-        org.springframework.security.core.userdetails.User principal = (User) authentication.getPrincipal();
-        return Jwts.builder()
-                .setSubject(principal.getUsername())
-                .signWith(getPrivateKey())
-                .compact();
-    }
-
     private PrivateKey getPrivateKey() {
         try {
             return (PrivateKey) keyStore.getKey("springblog", "secret".toCharArray());
@@ -76,6 +66,19 @@ public class JwtProvider {
             throw new SpringRedditException("Exception occurred while " +
                     "retrieving public key from keystore");
         }
+    }
+
+    public String getUsernameFromJwt(String token) {
+        Claims claims = parser()
+                .setSigningKey(getPublicKey())
+                .parseClaimsJwt(token)
+                .getBody();
+
+        return claims.getSubject();
+    }
+
+    public Long getJwtExpirationInMillis() {
+        return jwtExpirationInMillis;
     }
 
 }
