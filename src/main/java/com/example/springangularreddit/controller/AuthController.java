@@ -2,8 +2,10 @@ package com.example.springangularreddit.controller;
 
 import com.example.springangularreddit.dto.AuthenticationResponse;
 import com.example.springangularreddit.dto.LoginRequest;
+import com.example.springangularreddit.dto.RefreshTokenRequest;
 import com.example.springangularreddit.dto.RegisterRequest;
 import com.example.springangularreddit.service.AuthService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +32,11 @@ public class AuthController {
     @PostMapping("/login")
     public AuthenticationResponse login(@RequestBody LoginRequest loginRequest) {
         return authService.login(loginRequest);
+    }
+
+    @PostMapping("refresh/token")
+    public AuthenticationResponse refreshTokens(@Valid @RequestBody RefreshTokenRequest refreshTokenRequest) {
+        return authService.refreshToken(refreshTokenRequest);
     }
 
 }
